@@ -58,17 +58,17 @@ func testChannel(channel *model.Channel, testModel string) (err error, openAIErr
 				testModel = "gpt-3.5-turbo"
 			}
 		}
-	} else {
-		modelMapping := *channel.ModelMapping
-		if modelMapping != "" && modelMapping != "{}" {
-			modelMap := make(map[string]string)
-			err := json.Unmarshal([]byte(modelMapping), &modelMap)
-			if err != nil {
-				return err, service.OpenAIErrorWrapperLocal(err, "unmarshal_model_mapping_failed", http.StatusInternalServerError)
-			}
-			if modelMap[testModel] != "" {
-				testModel = modelMap[testModel]
-			}
+	}
+
+	modelMapping := *channel.ModelMapping
+	if modelMapping != "" && modelMapping != "{}" {
+		modelMap := make(map[string]string)
+		err := json.Unmarshal([]byte(modelMapping), &modelMap)
+		if err != nil {
+			return err, service.OpenAIErrorWrapperLocal(err, "unmarshal_model_mapping_failed", http.StatusInternalServerError)
+		}
+		if modelMap[testModel] != "" {
+			testModel = modelMap[testModel]
 		}
 	}
 
@@ -158,10 +158,8 @@ func buildTestRequest(model string) *dto.GeneralOpenAIRequest {
 	}
 	if strings.HasPrefix(model, "o1") || strings.HasPrefix(model, "o3") {
 		testRequest.MaxCompletionTokens = 10
-	} else if strings.HasPrefix(model, "gemini-2.0-flash-thinking") {
-		testRequest.MaxTokens = 10
 	} else {
-		testRequest.MaxTokens = 1
+		testRequest.MaxTokens = 10
 	}
 	content, _ := json.Marshal("hi")
 	testMessage := dto.Message{
