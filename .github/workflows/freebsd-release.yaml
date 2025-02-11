@@ -35,6 +35,12 @@ jobs:
         run: |
           go mod download
           GOOS=freebsd go build -ldflags "-s -w -X 'one-api/common.Version=$(git describe --tags)' -extldflags '-static'" -o one-api-freebsd
+
+      - name: Upload ${{ matrix.target.name }} to Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: one-api-freebsd
+          path: one-api-freebsd
       
       - name: Download Artifact
         uses: actions/download-artifact@v4
