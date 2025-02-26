@@ -5,9 +5,8 @@ permissions:
 on:
   workflow_dispatch:
   push:
-    tags:
-      - '*'
-      - '!*-alpha*'
+    branches:
+      - main
 jobs:
   release:
     runs-on: ubuntu-latest
