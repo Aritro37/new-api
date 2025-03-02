@@ -11,6 +11,8 @@ jobs:
     
     permissions:
       actions: write
+      packages: write
+      statuses: read
     steps:
     - name: Checkout current repo
       uses: actions/checkout@v4
