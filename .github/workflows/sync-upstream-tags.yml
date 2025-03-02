@@ -9,6 +9,8 @@ jobs:
   sync-tags:
     runs-on: ubuntu-latest
     
+    permissions:
+      actions: write
     steps:
     - name: Checkout current repo
       uses: actions/checkout@v4
@@ -23,4 +25,4 @@ jobs:
     - name: Push tags to origin
       run: git push origin --tags -f  # 强制推送所有tags
       env:
-        GITHUB_TOKEN: ${{ secrets.SYNC_PAT }} # 使用自动生成的token
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 使用自动生成的token
