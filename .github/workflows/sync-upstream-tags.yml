@@ -1,0 +1,26 @@
+name: Sync Upstream Tags
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # 每天UTC时间0点执行
+  workflow_dispatch:    # 允许手动触发
+
+jobs:
+  sync-tags:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout current repo
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # 获取完整仓库历史
+
+    - name: Add upstream remote
+      run: |
+        git remote add upstream https://github.com/Calcium-Ion/new-api.git
+        git fetch upstream --tags -f  # 强制获取上游tags
+
+    - name: Push tags to origin
+      run: git push origin --tags -f  # 强制推送所有tags
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 使用自动生成的token
